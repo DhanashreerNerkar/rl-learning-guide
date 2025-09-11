@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive Visual Learning Hub - Master complex topics through engaging, gamified experiences">
+    <meta name="keywords" content="interactive learning, visual education, machine learning, data science, programming">
+    <meta name="author" content="Visual Learning Hub">
+    <title>🎓 Visual Learning Hub</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            --accent-gradient: linear-gradient(45deg, #ff9a9e, #fecfef);
+            --success-gradient: linear-gradient(45deg, #43e97b, #38f9d7);
+            --card-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            --hover-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            --border-radius: 20px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            z-index: 0;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            background: var(--secondary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: #666;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            color: #777;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        /* Course Section */
+        .course-section {
+            margin-bottom: 50px;
+        }
+
+        .course-main-title {
+            font-size: 2.2rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .course-main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--secondary-gradient);
+            border-radius: 2px;
+        }
+
+        /* Course Container */
+        .course-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            border-left: 6px solid #4ecdc4;
+        }
+
+        .course-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed #e0e0e0;
+        }
+
+        .course-icon {
+            font-size: 4rem;
+            margin-right: 25px;
+            filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.1));
+        }
+
+        .course-info h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .course-description {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Lecture Grid */
+        .lectures-grid {
+            display: grid;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .lecture-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+            border: 2px solid #e8ecff;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .lecture-card.available {
+            border-color: #4ecdc4;
+        }
+
+        .lecture-card.available:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--hover-shadow);
+            border-color: #ff6b6b;
+        }
+
+        .lecture-card.coming-soon {
+            opacity: 0.7;
+            cursor: not-allowed;
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            border-color: #ddd;
+        }
+
+        .lecture-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--secondary-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .lecture-card.available:hover::before {
+            transform: scaleX(1);
+        }
+
+        .lecture-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .lecture-number {
+            background: var(--secondary-gradient);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-right: 20px;
+            flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .lecture-number.coming-soon {
+            background: #ccc;
+        }
+
+        .lecture-info {
+            flex: 1;
+        }
+
+        .lecture-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .lecture-subtitle {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+
+
+        .lecture-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .lecture-features li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 30px;
+            color: #555;
+        }
+
+        .lecture-features li::before {
+            content: '✅';
+            position: absolute;
+            left: 0;
+            font-size: 1.1rem;
+        }
+
+        .lecture-features.coming-soon li::before {
+            content: '⏳';
+        }
+
+        .lecture-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .status-available {
+            background: var(--success-gradient);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .status-coming-soon {
+            background: var(--accent-gradient);
+            color: #333;
+        }
+
+        .lecture-button {
+            width: 100%;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: var(--secondary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .progress-indicator {
+            background: #f0f0f0;
+            height: 6px;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--success-gradient);
+            width: 50%; /* 1 out of 2 lectures available */
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #eee;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success-gradient);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .main-title {
+                font-size: 2.5rem;
+            }
+
+            .course-container {
+                padding: 25px;
+            }
+
+            .course-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .course-icon {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .lecture-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .lecture-number {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .lecture-details {
+                justify-content: center;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="main-title">🎓 Visual Learning Hub</h1>
+                <p class="subtitle">RL Course by Google DeepMind - Made Easy</p>
+            </div>
+        </header>
+
+        <!-- Reinforcement Learning Course Section -->
+        <section class="course-section">
+            <h2 class="course-main-title">🎮 Reinforcement Learning Course</h2>
+            
+            <div class="course-container">
+                <div class="course-header">
+                    <div class="course-icon">🤖</div>
+                    <div class="course-info">
+                        <h2>Interactive RL Masterclass</h2>
+                        <p class="course-description">
+                            Dive deep into Reinforcement Learning through hands-on visualizations, interactive examples, 
+                            and step-by-step guided learning. Perfect for beginners and practitioners who want to truly 
+                            understand how RL agents learn to make optimal decisions.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Progress Indicator -->
+                <div class="progress-indicator">
+                    <div class="progress-bar"></div>
+                </div>
+                <p class="progress-text">📊 Course Progress: 1 of 2 lectures available (50% complete)</p>
+
+                <!-- Lectures Grid -->
+                <div class="lectures-grid">
+                    <!-- Lecture 1: Available -->
+                    <div class="lecture-card available" onclick="openLecture('rl-visual-notes-01.html')">
+
+                        
+                        <div class="lecture-header">
+                            <div class="lecture-number">1</div>
+                            <div class="lecture-info">
+                                <h3 class="lecture-title">Introduction to Reinforcement Learning</h3>
+                                <p class="lecture-subtitle">Foundations, Concepts & Interactive Examples</p>
+                            </div>
+                        </div>
+
+                        <div class="lecture-details">
+                            <span class="lecture-tag">Interactive</span>
+                            <span class="lecture-tag duration">45 min</span>
+                            <span class="lecture-tag difficulty">Beginner</span>
+                        </div>
+
+                        <ul class="lecture-features">
+                            <li>Interactive agent-environment loops</li>
+                            <li>Visual reward system explanations</li>
+                            <li>Animated maze navigation example</li>
+                            <li>Policy vs Value function breakdowns</li>
+                            <li>Real-world RL applications showcase</li>
+                            <li>Exploration vs Exploitation visualization</li>
+                        </ul>
+
+                        <button class="lecture-button btn-primary">
+                            Read More
+                        </button>
+                    </div>
+
+                    <!-- Lecture 2: Coming Soon -->
+                    <div class="lecture-card coming-soon">
+                        <div class="lecture-status status-coming-soon">🔜 Coming Soon</div>
+                        
+                        <div class="lecture-header">
+                            <div class="lecture-number coming-soon">2</div>
+                            <div class="lecture-info">
+                                <h3 class="lecture-title">Markov Decision Process</h3>
+                                <p class="lecture-subtitle">Mathematical Framework & Dynamic Programming</p>
+                            </div>
+                        </div>
+
+
+
+                        <ul class="lecture-features coming-soon">
+                            <li>Interactive MDP state diagrams</li>
+                            <li>Bellman equations visualized</li>
+                            <li>Value iteration animations</li>
+                            <li>Policy iteration step-by-step</li>
+                            <li>Markov property demonstrations</li>
+                            <li>Grid world MDP examples</li>
+                        </ul>
+
+                        <button class="lecture-button btn-secondary" onclick="showComingSoon()">
+                            📧 Notify Me When Available
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <h3>🌟 Making Learning Visual & Interactive</h3>
+                <p>Built with passion for education and powered by modern web technologies.</p>
+                
+                <div class="social-links">
+                    <a href="#" class="social-link" title="LinkedIn">💼</a>
+                    <a href="#" class="social-link" title="GitHub">🐙</a>
+                    <a href="#" class="social-link" title="Twitter">🐦</a>
+                    <a href="#" class="social-link" title="Email">📧</a>
+                </div>
+                
+                <p style="color: #999; font-size: 0.9rem; margin-top: 20px;">
+                    © 2025 Visual Learning Hub. Open source and free for education.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Lecture navigation function
+        function openLecture(lectureUrl) {
+            // Show loading toast
+            showToast('Loading lecture... 📚', 'info');
+            
+            // Add small delay for UX
+            setTimeout(() => {
+                window.open(lectureUrl, '_blank');
+                showToast('Lecture opened in new tab! 🎉', 'success');
+            }, 500);
+        }
+
+        // Coming soon notification
+        function showComingSoon() {
+            showToast('Thanks for your interest! We\'ll notify you when Lecture 2 is ready 🔔', 'info');
+        }
+
+        // Toast notification system
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = message;
+            
+            // Add type-specific styling
+            toast.className = 'toast show';
+            if (type === 'success') {
+                toast.style.background = 'linear-gradient(45deg, #43e97b, #38f9d7)';
+            } else if (type === 'info') {
+                toast.style.background = 'linear-gradient(45deg, #667eea, #764ba2)';
+            }
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Add enhanced hover effects
+        function addLectureEffects() {
+            const availableCards = document.querySelectorAll('.lecture-card.available');
+            
+            availableCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) rotateX(2deg)';
+                    this.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) rotateX(0)';
+                });
+            });
+        }
+
+        // Animate progress bar
+        function animateProgressBar() {
+            const progressBar = document.querySelector('.progress-bar');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.width = '50%';
+                        entry.target.style.transition = 'width 2s ease-in-out';
+                    }
+                });
+            });
+
+            observer.observe(progressBar);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add welcome message
+            setTimeout(() => {
+                showToast('Welcome to RL Course! Ready to learn? 🎓', 'success');
+            }, 1000);
+            
+            // Initialize animations and effects
+            addLectureEffects();
+            animateProgressBar();
+            
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '1' && e.ctrlKey) {
+                    e.preventDefault();
+                    openLecture('rl-visual-notes-01.html');
+                }
+            });
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            console.log('🚀 RL Course Hub loaded successfully!');
+            console.log('⌨️  Keyboard shortcut: Ctrl+1 to open Lecture 1');
+            console.log('📚 Current progress: 1/2 lectures available');
+        });
+
+        // Add click analytics (mock function for now)
+        function trackLectureClick(lectureNumber) {
+            console.log(`📊 Analytics: Lecture ${lectureNumber} clicked`);
+            // You can integrate with Google Analytics or other services here
+        }
+
+        // Enhanced click handlers with analytics
+        document.querySelectorAll('.lecture-card.available').forEach((card, index) => {
+            card.addEventListener('click', () => {
+                trackLectureClick(index + 1);
+            });
+        });
+    </script>
+</body>
+</html>
