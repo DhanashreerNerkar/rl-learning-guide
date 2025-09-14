@@ -26,7 +26,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             background: var(--primary-gradient);
             min-height: 100vh;
             padding: 20px;
@@ -85,14 +85,6 @@
             color: #666;
             margin-bottom: 20px;
             animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        .description {
-            font-size: 1.1rem;
-            color: #777;
-            max-width: 800px;
-            margin: 0 auto;
-            animation: fadeInUp 1s ease-out 0.4s both;
         }
 
         /* Course Section */
@@ -187,13 +179,6 @@
             border-color: #ff6b6b;
         }
 
-        .lecture-card.coming-soon {
-            opacity: 0.7;
-            cursor: not-allowed;
-            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
-            border-color: #ddd;
-        }
-
         .lecture-card::before {
             content: '';
             position: absolute;
@@ -232,10 +217,6 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
-        .lecture-number.coming-soon {
-            background: #ccc;
-        }
-
         .lecture-info {
             flex: 1;
         }
@@ -254,8 +235,6 @@
             margin-bottom: 15px;
         }
 
-
-
         .lecture-features {
             list-style: none;
             margin-bottom: 25px;
@@ -273,31 +252,6 @@
             position: absolute;
             left: 0;
             font-size: 1.1rem;
-        }
-
-        .lecture-features.coming-soon li::before {
-            content: '⏳';
-        }
-
-        .lecture-status {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        .status-available {
-            background: var(--success-gradient);
-            color: white;
-            animation: pulse 2s infinite;
-        }
-
-        .status-coming-soon {
-            background: var(--accent-gradient);
-            color: #333;
         }
 
         .lecture-button {
@@ -327,12 +281,6 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
-        .btn-secondary {
-            background: #e0e0e0;
-            color: #999;
-            cursor: not-allowed;
-        }
-
         .progress-indicator {
             background: #f0f0f0;
             height: 6px;
@@ -344,7 +292,7 @@
         .progress-bar {
             height: 100%;
             background: var(--success-gradient);
-            width: 50%; /* 1 out of 2 lectures available */
+            width: 100%; /* Updated to 100% since both lectures are now available */
             border-radius: 3px;
             transition: width 0.3s ease;
         }
@@ -437,42 +385,155 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
             .container {
-                padding: 20px;
-                margin: 10px;
+                padding: 15px;
+                margin: 5px;
+                border-radius: 15px;
             }
 
             .main-title {
-                font-size: 2.5rem;
+                font-size: 2rem;
+                line-height: 1.2;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
             }
 
             .course-container {
-                padding: 25px;
+                padding: 20px;
+                border-radius: 15px;
             }
 
             .course-header {
                 flex-direction: column;
                 text-align: center;
+                margin-bottom: 20px;
             }
 
             .course-icon {
+                font-size: 3rem;
                 margin-right: 0;
-                margin-bottom: 20px;
+                margin-bottom: 15px;
+            }
+
+            .course-info h2 {
+                font-size: 1.5rem;
+            }
+
+            .course-description {
+                font-size: 1rem;
+            }
+
+            .lecture-card {
+                padding: 20px;
+                border-radius: 12px;
             }
 
             .lecture-header {
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-            }
-
-            .lecture-number {
-                margin-right: 0;
                 margin-bottom: 15px;
             }
 
-            .lecture-details {
-                justify-content: center;
+            .lecture-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+                margin-right: 0;
+                margin-bottom: 12px;
+            }
+
+            .lecture-title {
+                font-size: 1.2rem;
+                line-height: 1.3;
+            }
+
+            .lecture-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .lecture-features {
+                margin-bottom: 20px;
+            }
+
+            .lecture-features li {
+                font-size: 0.9rem;
+                padding: 6px 0;
+            }
+
+            .lecture-button {
+                padding: 12px 20px;
+                font-size: 1rem;
+                border-radius: 10px;
+            }
+
+            .progress-indicator {
+                margin: 15px 0;
+            }
+
+            .progress-text {
+                font-size: 0.8rem;
+            }
+
+            .footer {
+                padding: 30px 15px;
+                margin-top: 40px;
+            }
+
+            .social-links {
+                gap: 15px;
+            }
+
+            .social-link {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Extra small screens (phones in portrait) */
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .course-container {
+                padding: 15px;
+            }
+
+            .course-icon {
+                font-size: 2.5rem;
+            }
+
+            .course-info h2 {
+                font-size: 1.3rem;
+            }
+
+            .lecture-card {
+                padding: 15px;
+            }
+
+            .lecture-title {
+                font-size: 1.1rem;
+            }
+
+            .lecture-features li {
+                font-size: 0.85rem;
+            }
+
+            .lecture-button {
+                padding: 10px 18px;
+                font-size: 0.9rem;
             }
         }
 
@@ -525,26 +586,18 @@
                 <div class="progress-indicator">
                     <div class="progress-bar"></div>
                 </div>
-                <p class="progress-text">📊 Course Progress: 1 of 2 lectures available (50% complete)</p>
+                <p class="progress-text">📊 Course Progress: 2 of 2 lectures available (100% complete)</p>
 
                 <!-- Lectures Grid -->
                 <div class="lectures-grid">
                     <!-- Lecture 1: Available -->
                     <div class="lecture-card available" onclick="openLecture('rl-visual-notes-01.html')">
-
-                        
                         <div class="lecture-header">
                             <div class="lecture-number">1</div>
                             <div class="lecture-info">
                                 <h3 class="lecture-title">Introduction to Reinforcement Learning</h3>
                                 <p class="lecture-subtitle">Foundations, Concepts & Interactive Examples</p>
                             </div>
-                        </div>
-
-                        <div class="lecture-details">
-                            <span class="lecture-tag">Interactive</span>
-                            <span class="lecture-tag duration">45 min</span>
-                            <span class="lecture-tag difficulty">Beginner</span>
                         </div>
 
                         <ul class="lecture-features">
@@ -561,21 +614,17 @@
                         </button>
                     </div>
 
-                    <!-- Lecture 2: Coming Soon -->
-                    <div class="lecture-card coming-soon">
-                        <div class="lecture-status status-coming-soon">🔜 Coming Soon</div>
-                        
+                    <!-- Lecture 2: Now Available -->
+                    <div class="lecture-card available" onclick="openLecture('rl-visual-notes-02.html')">
                         <div class="lecture-header">
-                            <div class="lecture-number coming-soon">2</div>
+                            <div class="lecture-number">2</div>
                             <div class="lecture-info">
                                 <h3 class="lecture-title">Markov Decision Process</h3>
                                 <p class="lecture-subtitle">Mathematical Framework & Dynamic Programming</p>
                             </div>
                         </div>
 
-
-
-                        <ul class="lecture-features coming-soon">
+                        <ul class="lecture-features">
                             <li>Interactive MDP state diagrams</li>
                             <li>Bellman equations visualized</li>
                             <li>Value iteration animations</li>
@@ -584,8 +633,8 @@
                             <li>Grid world MDP examples</li>
                         </ul>
 
-                        <button class="lecture-button btn-secondary" onclick="showComingSoon()">
-                            📧 Notify Me When Available
+                        <button class="lecture-button btn-primary">
+                            Read More
                         </button>
                     </div>
                 </div>
@@ -626,11 +675,6 @@
                 window.open(lectureUrl, '_blank');
                 showToast('Lecture opened in new tab! 🎉', 'success');
             }, 500);
-        }
-
-        // Coming soon notification
-        function showComingSoon() {
-            showToast('Thanks for your interest! We\'ll notify you when Lecture 2 is ready 🔔', 'info');
         }
 
         // Toast notification system
@@ -675,7 +719,7 @@
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.style.width = '50%';
+                        entry.target.style.width = '100%';
                         entry.target.style.transition = 'width 2s ease-in-out';
                     }
                 });
@@ -688,7 +732,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Add welcome message
             setTimeout(() => {
-                showToast('Welcome to RL Course! Ready to learn? 🎓', 'success');
+                showToast('Welcome to RL Course! Both lectures now available! 🎓', 'success');
             }, 1000);
             
             // Initialize animations and effects
@@ -701,14 +745,18 @@
                     e.preventDefault();
                     openLecture('rl-visual-notes-01.html');
                 }
+                if (e.key === '2' && e.ctrlKey) {
+                    e.preventDefault();
+                    openLecture('rl-visual-notes-02.html');
+                }
             });
         });
 
         // Performance monitoring
         window.addEventListener('load', function() {
             console.log('🚀 RL Course Hub loaded successfully!');
-            console.log('⌨️  Keyboard shortcut: Ctrl+1 to open Lecture 1');
-            console.log('📚 Current progress: 1/2 lectures available');
+            console.log('⌨️  Keyboard shortcuts: Ctrl+1 for Lecture 1, Ctrl+2 for Lecture 2');
+            console.log('📚 Current progress: 2/2 lectures available');
         });
 
         // Add click analytics (mock function for now)
