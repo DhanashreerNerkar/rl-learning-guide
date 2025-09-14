@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 MDP Visual Learning Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-button {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tab-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .concept-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .concept-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .emoji {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .diagram {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+            border: 3px dashed #4ecdc4;
+        }
+
+        .student-journey {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            gap: 15px;
+        }
+
+        .state-bubble {
+            background: linear-gradient(45deg, #ffecd2, #fcb69f);
+            padding: 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 120px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .state-bubble:hover {
+            transform: scale(1.1) rotate(-2deg);
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: #ff6b6b;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .matrix-cell {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .matrix-cell:hover {
+            transform: scale(1.05);
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .probability-bar {
+            height: 20px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            border-radius: 10px;
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .probability-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+            border-radius: 10px;
+            transition: width 2s ease-in-out;
+        }
+
+        .interactive-btn {
+            background: linear-gradient(45deg, #43e97b, #38f9d7);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #333;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .key-point {
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #e17055;
+            position: relative;
+        }
+
+        .key-point::before {
+            content: '💡';
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            font-size: 2rem;
+            background: white;
+            border-radius: 50%;
+            padding: 5px;
+        }
+
+        .formula {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .before-card {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+        }
+
+        .after-card {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+        }
+
+        .value-visualization {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .value-bar {
+            width: 60px;
+            background: #e0e0e0;
+            border-radius: 30px;
+            overflow: hidden;
+            margin: 10px;
+            position: relative;
+        }
+
+        .value-fill {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            width: 100%;
+            border-radius: 30px;
+            transition: height 1s ease-in-out;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .policy-demo {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .action-choice {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .action-choice:hover {
+            border-color: #4ecdc4;
+            transform: scale(1.05);
+        }
+
+        .action-choice.selected {
+            background: linear-gradient(45deg, #43e97b, #38f9d7);
+            color: white;
+        }
+
+        .bellman-visual {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+        }
+
+        .bellman-component {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            margin: 0 10px;
+            flex: 1;
+        }
+
+        .progress-tracker {
+            background: #f0f0f0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+            border-radius: 4px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .student-journey {
+                flex-direction: column;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .matrix-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .policy-demo {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🎯 Markov Decision Processes</h1>
+            <p class="subtitle">The Mathematical Foundation of Smart Decision Making</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showSection('intro')">🌟 What is MDP?</button>
+            <button class="tab-button" onclick="showSection('markov')">🔗 Markov Magic</button>
+            <button class="tab-button" onclick="showSection('student')">🎓 Student Life Example</button>
+            <button class="tab-button" onclick="showSection('rewards')">🏆 Adding Rewards</button>
+            <button class="tab-button" onclick="showSection('decisions')">🤔 Making Decisions</button>
+            <button class="tab-button" onclick="showSection('bellman')">⚡ Bellman Equation</button>
+        </div>
+
+        <!-- Introduction Section -->
+        <div id="intro" class="content-section active">
+            <div class="concept-card">
+                <h2 class="concept-title">
+                    <span class="emoji">🎯</span>
+                    What is a Markov Decision Process?
+                </h2>
+                <p>Think of MDP as upgrading from a simple chain reaction to a <strong>smart decision-making framework</strong>! It's like giving our agent superpowers to choose actions.</p>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card before-card">
+                        <h3>🔗 Before: Markov Chain</h3>
+                        <p>"Things just happen randomly"</p>
+                        <div class="diagram">
+                            <div class="student-journey">
+                                <div class="state-bubble">😴 Sleep</div>
+                                <span class="arrow">→</span>
+                                <div class="state-bubble">📚 Class</div>
+                                <span class="arrow">→</span>
+                                <div class="state-bubble">🎉 Party</div>
+                            </div>
+                            <p><em>No control over what happens!</em></p>
+                        </div>
+                    </div>
+                    <div class="comparison-card after-card">
+                        <h3>🎯 After: MDP</h3>
+                        <p>"I can choose what to do!"</p>
+                        <div class="diagram">
+                            <div class="student-journey">
+                                <div class="state-bubble">😴 Sleep</div>
+                                <span class="arrow">🤔</span>
+                                <div class="action-choice">📚 Study</div>
+                                <div class="action-choice">🎮 Game</div>
+                                <div class="action-choice">🍕 Eat</div>
+                            </div>
+                            <p><em>Agent chooses actions!</em></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-point">
+                    <strong>MDP = Markov Chain + Actions + Rewards</strong><br>
+                    It's the mathematical framework that lets agents make smart decisions to maximize rewards over time!
+                </div>
+            </div>
+        </div>
+
+        <!-- Markov Property Section -->
+        <div id="markov" class="content-section">
+            <div class="concept-card">
+                <h2 class="concept-title">
+                    <span class="emoji">🔮</span>
+                    The Markov Property - Living in the Present
+                </h2>
+                <p>The Markov Property is like having <strong>selective amnesia</strong> - only the present moment matters for predicting the future!</p>
+                
+                <div class="diagram">
+                    <h3>🕒 Time Machine Analogy</h3>
+                    <div class="bellman-visual">
+                        <div class="bellman-component">
+                            <h4>📚 Past</h4>
+                            <p>All your previous classes</p>
+                            <div style="opacity: 0.5;">❌ "Forget this!"</div>
+                        </div>
+                        <div class="bellman-component">
+                            <h4>⚡ Present</h4>
+                            <p>Currently in Math class</p>
+                            <div style="font-size: 1.5em;">✅ "This matters!"</div>
+                        </div>
+                        <div class="bellman-component">
+                            <h4>🔮 Future</h4>
+                            <p>What happens next?</p>
+                            <div>🤔 "Depends only on NOW"</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-point">
+                    <strong>🧠 Memory Rule:</strong> The future only depends on where you are RIGHT NOW, not how you got there!<br>
+                    <em>It's like GPS navigation - it doesn't care about your route history, just your current location.</em>
+                </div>
+
+                <button class="interactive-btn" onclick="demonstrateMarkov()">🎮 See Markov in Action!</button>
+                <div id="markov-demo" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+
+        <!-- Student Example Section -->
+        <div id="student" class="content-section">
+            <div class="concept-card">
+                <h2 class="concept-title">
+                    <span class="emoji">🎓</span>
+                    Student Life MDP - A Day in Your Life
+                </h2>
+                <p>Let's model a student's day as an MDP! You can choose actions and see how they affect your journey.</p>
+                
+                <div class="diagram">
+                    <h3>🗺️ Your Daily Adventure Map</h3>
+                    <div class="student-journey">
+                        <div class="state-bubble" id="class1">📖 Class 1</div>
+                        <div class="state-bubble" id="class2">📚 Class 2</div>
+                        <div class="state-bubble" id="class3">🔬 Class 3</div>
+                        <div class="state-bubble" id="facebook">📱 Facebook</div>
+                        <div class="state-bubble" id="sleep">😴 Sleep</div>
+                        <div class="state-bubble" id="pub">🍺 Pub</div>
+                        <div class="state-bubble" id="pass">🎉 Pass!</div>
+                    </div>
+                </div>
+
+                <div class="policy-demo">
+                    <div class="action-choice" onclick="selectAction('study')">
+                        <h4>📚 Study Hard</h4>
+                        <p>50% → Next Class<br>50% → Facebook</p>
+                    </div>
+                    <div class="action-choice" onclick="selectAction('party')">
+                        <h4>🎉 Party Time</h4>
+                        <p>High chance → Pub<br>Low chance → Class</p>
+                    </div>
+                    <div class="action-choice" onclick="selectAction('sleep')">
+                        <h4>😴 Sleep</h4>
+                        <p>Rest and recover<br>Reset energy</p>
+                    </div>
+                </div>
+
+                <div class="key-point">
+                    <strong>🎯 Transition Probabilities:</strong> Your actions don't guarantee outcomes - they just change the odds!<br>
+                    <em>Even if you choose to study, you might still end up on Facebook... we've all been there! 😅</em>
+                </div>
+
+                <h3>📊 Transition Matrix Visualization</h3>
+                <div class="matrix-grid" id="transition-matrix">
+                    <div class="matrix-cell">From/To</div>
+                    <div class="matrix-cell">Class</div>
+                    <div class="matrix-cell">Facebook</div>
+                    <div class="matrix-cell">Pub</div>
+                    <div class="matrix-cell">Class</div>
+                    <div class="matrix-cell">0.5</div>
+                    <div class="matrix-cell">0.5</div>
+                    <div class="matrix-cell">0.0</div>
+                    <div class="matrix-cell">Facebook</div>
+                    <div class="matrix-cell">0.1</div>
+                    <div class="matrix-cell">0.8</div>
+                    <div class="matrix-cell">0.1</div>
+                    <div class="matrix-cell">Pub</div>
+                    <div class="matrix-cell">0.2</div>
+                    <div class="matrix-cell">0.4</div>
+                    <div class="matrix-cell">0.4</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rewards Section -->
+        <div id="rewards" class="content-section">
+            <div class="concept-card">
+                <h2 class="concept-title">
+                    <span class="emoji">🏆</span>
+                    Adding Rewards - The Motivation System
+                </h2>
+                <p>Now we add the <strong>carrot and stick</strong> approach! Rewards tell our agent what's good and bad.</p>
+                
+                <div class="diagram">
+                    <h3>🎯 Student Reward System</h3>
+                    <div class="value-visualization">
+                        <div style="text-align: center;">
+                            <div class="value-bar" style="height: 200px;">
+                                <div class="value-fill" style="height: 90%;">+10</div>
+                            </div>
+                            <p>🎓 Pass Exam</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="value-bar" style="height: 200px;">
+                                <div class="value-fill" style="height: 30%; background: linear-gradient(45deg, #ff6b6b, #ff8e8e);">-2</div>
+                            </div>
+                            <p>📚 Attend Class</p>
+                            <small>(boring but necessary)</small>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="value-bar" style="height: 200px;">
+                                <div class="value-fill" style="height: 20%; background: linear-gradient(45deg, #ff4757, #ff6b6b);">-1</div>
+                            </div>
+                            <p>📱 Facebook</p>
+                            <small>(procrastination penalty)</small>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="value-bar" style="height: 200px;">
+                                <div class="value-fill" style="height: 50%;">+1</div>
+                            </div>
+                            <p>🍺 Pub</p>
+                            <small>(fun but distracting)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-point">
+                    <strong>🎯 Reward Design Philosophy:</strong><br>
+                    • Positive rewards for achieving goals<br>
+                    • Small negative rewards for necessary but boring actions<br>
+                    • Penalties for distractions<br>
+                    • Balance immediate vs long-term rewards
+                </div>
+
+                <h3>⏰ Discount Factor - Future vs Present</h3>
+                <div class="diagram">
+                    <div class="bellman-visual">
+                        <div class="bellman-component">
+                            <h4>γ = 0</h4>
+                            <p>"YOLO Mode"</p>
+                            <div>Only care about NOW</div>
+                        </div>
+                        <div class="bellman-component">
+                            <h4>γ = 0.5</h4>
+                            <p>"Balanced"</p>
+                            <div>Present > Future</div>
+                        </div>
+                        <div class="bellman-component">
+                            <h4>γ = 0.9</h4>
+                            <p>"Long-term Thinker"</p>
+                            <div>Future almost = Present</div>
+                        </div>
+                        <div class="bellman-component">
+                            <h4>γ = 1</h4>
+                            <p>"Perfectionist"</p>
+                            <div>All future matters equally</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="interactive-btn" onclick="showDiscountEffect()">💰 See Discount Factor Impact</button>
+                <div id="discount-demo"></div>
+            </div>
+        </div>
+
+        <!-- Decisions Section -->
+        <div id="decisions" class="content-section">
+            <div class="concept-card">
+                <h2 class="concept-title">
+                    <span class="emoji">🤔</span>
+                    Making Smart Decisions - Policies and Value Functions
+                </h2>
+                <p>Now comes the fun part - how do we make <strong>optimal decisions</strong>?</p>
+                
+                <div class="diagram">
+                    <h3>🧠 The Decision Making Process</h3>
+                    <div class="student-journey">
+                        <div class="state-bubble">📍 Current State</div>
+                        <span class="arrow">→</span>
+                        <div class="state-bubble">🤔 Policy<br><small>(Decision Rules)</small></div>
+                        <span class="arrow">→</span>
+                        <div class="state-bubble">🎬 Action</div>
+                        <span class="arrow">→</span>
+                        <div class="state-bubble">🏆 Reward + New State</div>
+                    </div>
+                </div>
+
+                <h3>📋 Policy Types</h3>
+                <div class="comparison-grid">
+                    <div class="comparison-card before-card">
+                        <h3>🎲 Stochastic Policy</h3>
+                        <p>"Sometimes do this, sometimes do that"</p>
+                        <div style="margin: 15px 0;">
+                            <div class="probability-bar">
+                                <div class="probability-fill" style="width: 60%;"></div>
+                            </div>
+                            <p>60% Study, 40% Party</p>
+                        </div>
+                        <p><em>Allows exploration!</em></p>
+                    </div>
+                    <div class="comparison-card after-card">
+                        <h3>⚡ Deterministic Policy</h3>
+                        <p>"Always do the best action"</p>
+                        <div style="margin: 15px 0;">
+                            <div class="probability-bar">
+                                <div class="probability-fill" style="width: 100%;"></div>
+                            </div>
+                            <p>100% Study (if it's optimal)</p>
+                        </div>
+                        <p><em>Pure exploitation!</em></p>
+                    </div>
+                </div>
+
+                <h3>💎 Value Function - "How Good is This State?"</h3>
+                <div class="key-point">
+                    <strong>V(s) = Expected total reward starting from state s</strong><br>
+                    <em>It's like asking: "If I'm in Math class right now, what's my expected final grade?"</em>
+                </div>
+
+                <div class="value-visualization">
+                    <div style="text-align: center;">
+                        <div class="value-bar" style="height: 150px;">
+                            <div class="value-fill" style="height: 80%;">8.2</div>
+                        </div>
+                        <p>📚 In Class</p>
+                        <small>High value - good position!</small>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="value-bar" style="height: 150px;">
+                            <div class="value-fill" style="height: 20%; background: linear-gradient(45deg, #ff6b6b, #ff8e8e);">2.1</div>
+                        </div>
+                        <p>📱 On Facebook</p>
+                        <small>Low value - dig yourself out!</small>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="value-bar" style="height: 150px;">
+                            <div class="value-fill" style="height: 60%;">6.5</div>
+                        </div>
+                        <p>🍺 At Pub</p>
+                        <small>Medium - fun but risky</small>
+                    </div>
+                </div>
+
+                <button class="interactive-btn" onclick="calculateValues()">🔢 Calculate State Values</button>
+            </div>
+        </div>
+
+        <!-- Bellman Equation Section -->
+        <div id="bellman" class="content-section">
+            <div class="concept-card">
+                <h2 class="concept-title">
+                    <span class="emoji">⚡</span>
+                    The Bellman Equation - The Magic Formula
+                </h2>
+                <p>This is the <strong>secret sauce</strong> of reinforcement learning! It's like a recursive recipe for optimal decision making.</p>
+                
+                <div class="formula">
+                    V(s) = max[R(s,a) + γ × Σ P(s'|s,a) × V(s')]
+                </div>
+
+                <div class="diagram">
+                    <h3>🔮 Breaking Down the Magic</h3>
+                    <div class="bellman-visual">
+                        <div class="bellman-component">
+                            <h4>🏆 R(s,a)</h4>
+                            <p>Immediate Reward</p>
+                            <div>"What do I get NOW?"</div>
+                        </div>
+                        <div class="bellman-component">
+                            <h4>⏰ γ</h4>
+                            <p>Discount Factor</p>
+                            <div>"How much do I care about the future?"</div>
+                        </div>
+                        <div class="bellman-component">
+                            <h4>🎲 P(s'|s,a)</h4>
+                            <p>Transition Probability</p>
+                            <div>"What are the odds?"</div>
+                        </div>
+                        <div class="bellman-component">
+                            <h4>💎 V(s')</h4>
+                            <p>Future Value</p>
+                            <div>"How good is where I end up?"</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-point">
+                    <strong>🧠 Bellman Intuition:</strong><br>
+                    "The value of being somewhere = immediate reward + discounted expected value of where you'll end up"<br>
+                    <em>It's like calculating the total value of a journey by adding the immediate step plus the expected value of the rest of the trip!</em>
+                </div>
+
+                <h3>🔄 The Bellman Backup</h3>
+                <div class="diagram">
+                    <div class="student-journey">
+                        <div class="state-bubble">📚 Current: Class<br>V = ?</div>
+                        <span class="arrow">🤔</span>
+                        <div style="text-align: center;">
+                            <div class="action-choice">📖 Study</div>
+                            <div style="font-size: 0.8em; margin: 5px;">R = -2</div>
+                        </div>
+                        <span class="arrow">🎲</span>
+                        <div style="text-align: center;">
+                            <div class="state-bubble">📚 Next Class<br>V = 8.5</div>
+                            <div style="font-size: 0.8em;">50% chance</div>
+                            <br>
+                            <div class="state-bubble">📱 Facebook<br>V = 2.1</div>
+                            <div style="font-size: 0.8em;">50% chance</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div class="formula">V(Class) = -2 + 0.9 × [0.5 × 8.5 + 0.5 × 2.1] = 2.77</div>
+                    </div>
+                </div>
+
+                <button class="interactive-btn" onclick="solveBellman()">⚡ Solve Bellman Equation Step by Step</button>
+                <div id="bellman-solution" style="margin-top: 20px;"></div>
+
+                <h3>🎯 Finding the Optimal Policy</h3>
+                <div class="key-point">
+                    <strong>Once we know V*(s), the optimal policy is easy:</strong><br>
+                    π*(s) = argmax[R(s,a) + γ × Σ P(s'|s,a) × V*(s')]<br>
+                    <em>Just pick the action that gives you the highest expected value!</em>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update button states
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function demonstrateMarkov() {
+            const demo = document.getElementById('markov-demo');
+            demo.innerHTML = `
+                <div class="diagram">
+                    <h4>🎮 Markov Property Demo</h4>
+                    <div class="student-journey">
+                        <div class="state-bubble" style="opacity: 0.3;">🏠 Home</div>
+                        <span class="arrow">→</span>
+                        <div class="state-bubble" style="opacity: 0.3;">🚌 Bus</div>
+                        <span class="arrow">→</span>
+                        <div class="state-bubble" style="background: linear-gradient(45deg, #43e97b, #38f9d7);">📚 In Class NOW</div>
+                        <span class="arrow">❓</span>
+                        <div class="state-bubble">🤔 What's next?</div>
+                    </div>
+                    <p style="margin-top: 15px;"><strong>Only the current state (In Class) determines what happens next!</strong><br>
+                    <em>It doesn't matter if you came from home or took 3 buses to get here.</em></p>
+                </div>
+            `;
+        }
+
+        function selectAction(action) {
+            // Remove previous selections
+            document.querySelectorAll('.action-choice').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Select current action
+            event.target.classList.add('selected');
+            
+            // Show outcome based on action
+            const outcomes = {
+                'study': 'Good choice! 📚 You have a 50% chance of advancing to the next class.',
+                'party': 'Living dangerously! 🎉 High chance of ending up at the pub.',
+                'sleep': 'Rest up! 😴 You\'ll wake up refreshed for tomorrow.'
+            };
+            
+            // Create or update outcome display
+            let outcomeDiv = document.getElementById('action-outcome');
+            if (!outcomeDiv) {
+                outcomeDiv = document.createElement('div');
+                outcomeDiv.id = 'action-outcome';
+                outcomeDiv.className = 'key-point';
+                event.target.parentElement.appendChild(outcomeDiv);
+            }
+            
+            outcomeDiv.innerHTML = `<strong>📊 Outcome:</strong> ${outcomes[action]}`;
+        }
+
+        function showDiscountEffect() {
+            const demo = document.getElementById('discount-demo');
+            demo.innerHTML = `
+                <div class="diagram">
+                    <h4>💰 Discount Factor Impact on Total Value</h4>
+                    <div style="display: flex; justify-content: space-around; margin: 20px 0;">
+                        <div style="text-align: center;">
+                            <h5>γ = 0 (Immediate only)</h5>
+                            <div class="value-bar" style="height: 100px;">
+                                <div class="value-fill" style="height: 30%;">3</div>
+                            </div>
+                            <p><small>Only current reward matters</small></p>
+                        </div>
+                        <div style="text-align: center;">
+                            <h5>γ = 0.5 (Balanced)</h5>
+                            <div class="value-bar" style="height: 100px;">
+                                <div class="value-fill" style="height: 60%;">6</div>
+                            </div>
+                            <p><small>Future matters half as much</small></p>
+                        </div>
+                        <div style="text-align: center;">
+                            <h5>γ = 0.9 (Long-term)</h5>
+                            <div class="value-bar" style="height: 100px;">
+                                <div class="value-fill" style="height: 90%;">9.5</div>
+                            </div>
+                            <p><small>Future almost as important</small></p>
+                        </div>
+                    </div>
+                    <p><strong>Same reward sequence: [3, 2, 4, 1, 5]</strong><br>
+                    <em>Higher γ = more forward-thinking agent!</em></p>
+                </div>
+            `;
+        }
+
+        function calculateValues() {
+            // Simple value calculation animation
+            const values = document.querySelectorAll('.value-fill');
+            values.forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.style.transform = 'scaleY(1.2)';
+                    setTimeout(() => {
+                        bar.style.transform = 'scaleY(1)';
+                    }, 300);
+                }, index * 200);
+            });
+        }
+
+        function solveBellman() {
+            const solution = document.getElementById('bellman-solution');
+            solution.innerHTML = `
+                <div class="diagram">
+                    <h4>🔢 Step-by-Step Bellman Solution</h4>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 10px 0;">
+                        <p><strong>Step 1:</strong> Immediate Reward = -2 (attending class is boring)</p>
+                        <p><strong>Step 2:</strong> Expected Future Value = 0.5 × 8.5 + 0.5 × 2.1 = 5.3</p>
+                        <p><strong>Step 3:</strong> Discounted Future = 0.9 × 5.3 = 4.77</p>
+                        <p><strong>Step 4:</strong> Total Value = -2 + 4.77 = <strong>2.77</strong></p>
+                    </div>
+                    <div class="key-point">
+                        <strong>💡 Insight:</strong> Even though attending class gives negative immediate reward (-2), 
+                        the expected future benefits (4.77) make it worthwhile overall!
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize page with some animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate probability bars on page load
+            setTimeout(() => {
+                document.querySelectorAll('.probability-fill').forEach(bar => {
+                    const width = bar.style.width || '50%';
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                });
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
