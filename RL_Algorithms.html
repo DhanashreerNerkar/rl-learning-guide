@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chef Alex's Complete RL Kitchen Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        .terminology-intro {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .term-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .term-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .week-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        
+        .day-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .day-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .day-name {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .algorithm-name {
+            font-size: 1.2em;
+            margin-top: 10px;
+            opacity: 0.95;
+        }
+        
+        .chef-setup {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chef-visual {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .chef-avatar {
+            width: 100px;
+            height: 100px;
+            background: #FFD700;
+            border-radius: 50%;
+            margin: 20px auto;
+            position: relative;
+            animation: bounce 2s infinite;
+        }
+        
+        .chef-avatar::before {
+            content: "👨‍🍳";
+            font-size: 60px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .thinking-process {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .thought-bubble {
+            background: white;
+            border: 3px solid #4caf50;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 10px 0;
+            position: relative;
+            font-style: italic;
+        }
+        
+        .thought-bubble::before {
+            content: "💭";
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            font-size: 30px;
+        }
+        
+        .state-action-flow {
+            background: #fff3e0;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+        
+        .flow-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #e65100;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .state-box {
+            background: #bbdefb;
+            border: 3px solid #1976d2;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .action-box {
+            background: #ffecb3;
+            border: 3px solid #ffa000;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .reward-box {
+            background: #c8e6c9;
+            border: 3px solid #388e3c;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .arrow-down {
+            text-align: center;
+            font-size: 2em;
+            color: #ff6b6b;
+            margin: 10px 0;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        .q-table-update {
+            background: #f3e5f5;
+            border: 3px solid #7b1fa2;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+        
+        .q-table-visual {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .q-cell {
+            background: white;
+            border: 2px solid #9c27b0;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        
+        .q-cell.updated {
+            background: #ffeb3b;
+            animation: highlight 1s ease;
+        }
+        
+        @keyframes highlight {
+            0% { background: #ffeb3b; transform: scale(1.2); }
+            100% { background: #fff9c4; transform: scale(1); }
+        }
+        
+        .formula-detailed {
+            background: white;
+            border: 3px solid #3f51b5;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+        
+        .formula-title {
+            font-weight: bold;
+            color: #3f51b5;
+            margin-bottom: 10px;
+        }
+        
+        .formula-equation {
+            background: #e8eaf6;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .formula-explanation {
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+        
+        .key-insight {
+            background: linear-gradient(135deg, #ffd54f, #ffb300);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 25px 0;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.1em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .comparison-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .compare-box {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        .soup-stages {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .soup-stage {
+            text-align: center;
+            margin: 10px;
+        }
+        
+        .soup-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .importance-sampling {
+            background: #fff8e1;
+            border: 2px dashed #f57c00;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .is-calculation {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        
+        .detailed-step {
+            background: #f0f4f8;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #2196f3;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍳 Chef Alex's Complete RL Kitchen Journey 🍲</h1>
+        
+        <!-- Terminology Introduction -->
+        <div class="terminology-intro">
+            <h2>🎯 Understanding Our Kitchen Terms (RL Concepts)</h2>
+            <div class="term-grid">
+                <div class="term-box">
+                    <strong>STATE (S)</strong><br>
+                    Current kitchen situation<br>
+                    "I have onions in the pot"
+                </div>
+                <div class="term-box">
+                    <strong>ACTION (A)</strong><br>
+                    What chef can do<br>
+                    "Add carrots" or "Add salt"
+                </div>
+                <div class="term-box">
+                    <strong>REWARD (R)</strong><br>
+                    Immediate feedback<br>
+                    "+10 for good flavor"
+                </div>
+                <div class="term-box">
+                    <strong>POLICY (π)</strong><br>
+                    Chef's recipe/strategy<br>
+                    "Always add carrots after onions"
+                </div>
+                <div class="term-box">
+                    <strong>Q-TABLE</strong><br>
+                    Recipe book scores<br>
+                    Q(onions, carrots) = 75
+                </div>
+                <div class="term-box">
+                    <strong>EPISODE</strong><br>
+                    One complete soup<br>
+                    Start → Cook → Taste
+                </div>
+                <div class="term-box">
+                    <strong>RETURN (G)</strong><br>
+                    Total score<br>
+                    Sum of all rewards
+                </div>
+                <div class="term-box">
+                    <strong>γ (GAMMA)</strong><br>
+                    Future discount<br>
+                    "Care less about later steps"
+                </div>
+            </div>
+        </div>
+        
+        <div class="week-container">
+            <!-- MONDAY: DP CONTROL -->
+            <div class="day-section">
+                <div class="day-header">
+                    <div class="day-name">MONDAY</div>
+                    <div class="algorithm-name">Dynamic Programming Control - The All-Knowing Planner</div>
+                </div>
+                
+                <div class="chef-setup">
+                    <div class="chef-visual">
+                        <div class="chef-avatar"></div>
+                        <div style="font-size: 4em;">📚</div>
+                        <p><strong>Chef has:</strong> Perfect Model (Magic Encyclopedia)</p>
+                    </div>
+                    <div class="thinking-process">
+                        <h3>Chef Alex's Thinking Process:</h3>
+                        <div class="thought-bubble">
+                            "I have this magical encyclopedia that tells me EXACTLY what will happen for every possible action. I don't need to cook anything yet - I can plan the perfect recipe just by thinking!"
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="state-action-flow">
+                    <div class="flow-title">📊 Complete State-Action Planning Process</div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">1</span>
+                        <strong>Policy Evaluation Phase:</strong>
+                    </div>
+                    <div class="state-box">
+                        <strong>STATE:</strong> Empty Pot<br>
+                        Current Policy says: "Add Onions"
+                    </div>
+                    <div class="thought-bubble">
+                        "Let me check the encyclopedia... If I follow my current policy all the way through, what's my expected total score?"
+                    </div>
+                    <div class="formula-equation">
+                        V(Empty Pot) = R(add onions) + γ × V(Pot with Onions)
+                    </div>
+                    <div class="thought-bubble">
+                        "The encyclopedia says: Starting from empty pot and following current policy gives total value of 72"
+                    </div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">2</span>
+                        <strong>Policy Improvement Phase:</strong>
+                    </div>
+                    <div class="thought-bubble">
+                        "But wait! What if I try different actions? Let me check ALL possibilities in my encyclopedia..."
+                    </div>
+                    
+                    <div class="q-table-visual">
+                        <div class="q-cell">
+                            Q(Empty, Onions) = 72
+                        </div>
+                        <div class="q-cell updated">
+                            Q(Empty, Garlic) = 85 ✨
+                        </div>
+                        <div class="q-cell">
+                            Q(Empty, Water) = 60
+                        </div>
+                    </div>
+                    
+                    <div class="thought-bubble">
+                        "Aha! Starting with garlic instead gives 85! I'll update my policy!"
+                    </div>
+                </div>
+                
+                <div class="formula-detailed">
+                    <div class="formula-title">The DP Update Formula:</div>
+                    <div class="formula-equation">
+                        π(s) = argmax_a Σ P(s'|s,a) × [R(s,a,s') + γ × V(s')]
+                    </div>
+                    <div class="formula-explanation">
+                        <strong>Translation:</strong> For each state, choose the action that gives the highest expected value by:
+                        <ul>
+                            <li>P(s'|s,a) = Probability of next state (from encyclopedia)</li>
+                            <li>R(s,a,s') = Immediate reward (from encyclopedia)</li>
+                            <li>V(s') = Future value from that state</li>
+                            <li>γ = How much we care about future (usually 0.9)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-insight">
+                    🎯 KEY: Never cooks! Plans perfect recipe using complete knowledge, then executes flawlessly!
+                </div>
+            </div>
+            
+            <!-- TUESDAY: MC ON-POLICY -->
+            <div class="day-section">
+                <div class="day-header">
+                    <div class="day-name">TUESDAY</div>
+                    <div class="algorithm-name">Monte Carlo On-Policy - The Complete Experience Learner</div>
+                </div>
+                
+                <div class="chef-setup">
+                    <div class="chef-visual">
+                        <div class="chef-avatar"></div>
+                        <div style="font-size: 4em;">🍲</div>
+                        <p><strong>No Model!</strong> Must cook to learn</p>
+                    </div>
+                    <div class="thinking-process">
+                        <h3>Chef Alex's Thinking Process:</h3>
+                        <div class="thought-bubble">
+                            "Encyclopedia is gone! I must cook complete soups and learn from the final taste. I'll follow my current recipe but sometimes (ε=10% chance) try random ingredients!"
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="state-action-flow">
+                    <div class="flow-title">🍜 Complete Episode Journey</div>
+                    
+                    <div class="soup-stages">
+                        <div class="soup-stage">
+                            <div class="soup-icon">🍲</div>
+                            <div class="state-box">
+                                STATE: Empty<br>
+                                ACTION: Add Onions<br>
+                                (followed recipe)
+                            </div>
+                        </div>
+                        <div class="soup-stage">
+                            <div class="soup-icon">🧅</div>
+                            <div class="state-box">
+                                STATE: Onions<br>
+                                ACTION: Add Carrots<br>
+                                (random exploration!)
+                            </div>
+                        </div>
+                        <div class="soup-stage">
+                            <div class="soup-icon">🥕</div>
+                            <div class="state-box">
+                                STATE: Onions+Carrots<br>
+                                ACTION: Add Salt<br>
+                                (followed recipe)
+                            </div>
+                        </div>
+                        <div class="soup-stage">
+                            <div class="soup-icon">✅</div>
+                            <div class="reward-box">
+                                FINAL TASTE<br>
+                                Return G = 75
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="thought-bubble">
+                        "The final score was 75. Now I go back and update EVERY step I took:"
+                    </div>
+                    
+                    <div class="q-table-update">
+                        <h4>Updating Q-Table (Recipe Book):</h4>
+                        <div class="q-cell updated">
+                            Q(Empty, Onions): Old avg = 70<br>
+                            This episode = 75<br>
+                            New avg = 72.5
+                        </div>
+                        <div class="q-cell updated">
+                            Q(Onions, Carrots): Old avg = 65<br>
+                            This episode = 75<br>
+                            New avg = 70
+                        </div>
+                        <div class="q-cell updated">
+                            Q(Onions+Carrots, Salt): Old avg = 73<br>
+                            This episode = 75<br>
+                            New avg = 74
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="formula-detailed">
+                    <div class="formula-title">MC Update Formula:</div>
+                    <div class="formula-equation">
+                        Q(s,a) ← Q(s,a) + α[G - Q(s,a)]
+                    </div>
+                    <div class="formula-explanation">
+                        Where:
+                        <ul>
+                            <li>G = Total return from that point (75 in our example)</li>
+                            <li>α = Learning rate (how much to update)</li>
+                            <li>We update using the ACTUAL final score, not predictions</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-insight">
+                    🍜 KEY: Must cook entire soup to learn! Updates based on FINAL taste only!
+                </div>
+            </div>
+            
+            <!-- WEDNESDAY: MC OFF-POLICY -->
+            <div class="day-section">
+                <div class="day-header">
+                    <div class="day-name">WEDNESDAY</div>
+                    <div class="algorithm-name">Monte Carlo Off-Policy - Master Watching Wild Apprentice</div>
+                </div>
+                
+                <div class="chef-setup">
+                    <div class="chef-visual">
+                        <div style="display: flex; justify-content: center; gap: 20px;">
+                            <div>
+                                <div class="chef-avatar"></div>
+                                <p>Master (Target π)</p>
+                            </div>
+                            <div>
+                                <div class="chef-avatar" style="background: #ff6b6b;"></div>
+                                <p>Apprentice (Behavior b)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="thinking-process">
+                        <h3>Two Different Policies:</h3>
+                        <div class="thought-bubble">
+                            "I want to learn the PERFECT recipe (target policy π) but I'm watching my crazy apprentice cook (behavior policy b). The apprentice explores wildly - even adds ketchup!"
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="state-action-flow">
+                    <div class="flow-title">🎭 The Correction Process</div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">1</span>
+                        <strong>Apprentice Cooks:</strong>
+                    </div>
+                    
+                    <div class="soup-stages">
+                        <div class="soup-stage">
+                            <div class="state-box">
+                                STATE: Onions<br>
+                                Apprentice ACTION: Add Ketchup 🍅<br>
+                                (5% chance in behavior policy)
+                            </div>
+                        </div>
+                        <div class="soup-stage">
+                            <div class="reward-box">
+                                Final Return: 40<br>
+                                (Terrible soup!)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="importance-sampling">
+                        <h4>Importance Sampling Calculation:</h4>
+                        <div class="thought-bubble">
+                            "How seriously should I take this result?"
+                        </div>
+                        <div class="is-calculation">
+                            π(ketchup|onions) = 0% (Master would NEVER do this)<br>
+                            b(ketchup|onions) = 5% (Apprentice had 5% chance)<br>
+                            <br>
+                            ρ = π/b = 0/0.05 = 0<br>
+                            <br>
+                            Corrected Return = ρ × G = 0 × 40 = 0
+                        </div>
+                        <div class="thought-bubble">
+                            "This episode tells me NOTHING about my target policy! Ignore it completely!"
+                        </div>
+                    </div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">2</span>
+                        <strong>When Apprentice Follows Master:</strong>
+                    </div>
+                    
+                    <div class="is-calculation">
+                        If apprentice adds carrots (both policies agree):<br>
+                        π(carrots|onions) = 100% (Master's choice)<br>
+                        b(carrots|onions) = 80% (Apprentice usually follows)<br>
+                        <br>
+                        ρ = 100%/80% = 1.25<br>
+                        <br>
+                        Corrected Return = 1.25 × 75 = 93.75<br>
+                        (We value this MORE because apprentice was less likely to do it!)
+                    </div>
+                </div>
+                
+                <div class="key-insight">
+                    🎭 KEY: Learn perfect recipe by watching explorer, but mathematically correct for deviations!
+                </div>
+            </div>
+            
+            <!-- THURSDAY: SARSA -->
+            <div class="day-section">
+                <div class="day-header">
+                    <div class="day-name">THURSDAY</div>
+                    <div class="algorithm-name">SARSA (TD On-Policy) - The Step-by-Step Taster</div>
+                </div>
+                
+                <div class="chef-setup">
+                    <div class="chef-visual">
+                        <div class="chef-avatar"></div>
+                        <div style="font-size: 4em;">👅</div>
+                        <p><strong>Tastes after EVERY step!</strong></p>
+                    </div>
+                    <div class="thinking-process">
+                        <h3>Chef Alex's Revolutionary Idea:</h3>
+                        <div class="thought-bubble">
+                            "Why wait until the soup is done? I'll learn from EVERY SINGLE STEP! I'll taste, take action, see immediate result, and update immediately!"
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="state-action-flow">
+                    <div class="flow-title">🔄 The SARSA Loop (State-Action-Reward-State'-Action')</div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">S</span>
+                        <strong>Current STATE: "Pot with Onions"</strong>
+                    </div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">A</span>
+                        <strong>Choose ACTION: Check Q-table, decide "Add Carrots"</strong>
+                    </div>
+                    
+                    <div class="thought-bubble">
+                        "My Q-table says Q(Onions, Carrots) = 70. Let's do it!"
+                    </div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">R</span>
+                        <strong>Get REWARD: -1 (effort of adding ingredient)</strong>
+                    </div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">S'</span>
+                        <strong>New STATE: "Pot with Onions+Carrots"</strong>
+                    </div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">A'</span>
+                        <strong>Next ACTION I WILL take: "Add Celery" (Q-value = 80)</strong>
+                    </div>
+                    
+                    <div class="q-table-update">
+                        <h4>Immediate Update (The SARSA Magic!):</h4>
+                        <div class="thought-bubble">
+                            "I don't wait for the soup to finish! I update NOW based on what I'm ACTUALLY going to do next!"
+                        </div>
+                        <div class="formula-equation">
+                            TD Target = R + γ × Q(S', A')<br>
+                            TD Target = -1 + 0.9 × 80 = 71
+                        </div>
+                        <div class="q-cell updated">
+                            Q(Onions, Carrots):<br>
+                            Old = 70<br>
+                            Target = 71<br>
+                            New = 70 + 0.1×(71-70) = 70.1
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comparison-section">
+                    <div class="compare-box">
+                        <h4>Why "SARSA"?</h4>
+                        <strong>S</strong>tate (Onions)<br>
+                        <strong>A</strong>ction (Add Carrots)<br>
+                        <strong>R</strong>eward (-1)<br>
+                        <strong>S</strong>tate (Onions+Carrots)<br>
+                        <strong>A</strong>ction (Add Celery)<br>
+                    </div>
+                    <div class="compare-box">
+                        <h4>Key Difference from MC:</h4>
+                        MC: Wait for final taste (Return)<br>
+                        SARSA: Learn from immediate step + expected future<br>
+                        <strong>Updates happen DURING cooking!</strong>
+                    </div>
+                </div>
+                
+                <div class="key-insight">
+                    👅 KEY: Updates using the ACTUAL next action chef will take (on-policy)!
+                </div>
+            </div>
+            
+            <!-- FRIDAY: Q-LEARNING -->
+            <div class="day-section">
+                <div class="day-header">
+                    <div class="day-name">FRIDAY</div>
+                    <div class="algorithm-name">Q-Learning (TD Off-Policy) - The Optimistic Planner</div>
+                </div>
+                
+                <div class="chef-setup">
+                    <div class="chef-visual">
+                        <div class="chef-avatar"></div>
+                        <div style="font-size: 4em;">🧠</div>
+                        <p><strong>Always assumes BEST future!</strong></p>
+                    </div>
+                    <div class="thinking-process">
+                        <h3>Chef Alex's Optimistic Thinking:</h3>
+                        <div class="thought-bubble">
+                            "Even if the apprentice makes mistakes NOW, I'll update my Q-table assuming PERFECT decisions from the next step onward!"
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="state-action-flow">
+                    <div class="flow-title">🎯 The Q-Learning Difference</div>
+                    
+                    <div class="detailed-step">
+                        <strong>Scenario: Apprentice adds ketchup (bad move!)</strong>
+                    </div>
+                    
+                    <div class="soup-stages">
+                        <div class="soup-stage">
+                            <div class="state-box">
+                                STATE: Onions<br>
+                                ACTION taken: Add Ketchup<br>
+                                REWARD: -5 (yuck!)
+                            </div>
+                        </div>
+                        <div class="soup-stage">
+                            <div class="state-box">
+                                NEW STATE: Onions+Ketchup<br>
+                                <strong style="color: red;">Apprentice will do: Add Sugar</strong><br>
+                                <strong style="color: green;">BEST possible: Add Vinegar</strong>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-section">
+                        <div class="compare-box" style="border-left-color: #f44336;">
+                            <h4>SARSA Would Do:</h4>
+                            Use ACTUAL next: Q(Ketchup, Sugar) = 30<br>
+                            TD Target = -5 + 0.9×30 = 22
+                        </div>
+                        <div class="compare-box" style="border-left-color: #4caf50;">
+                            <h4>Q-Learning Does:</h4>
+                            Use BEST possible: Q(Ketchup, Vinegar) = 60<br>
+                            TD Target = -5 + 0.9×60 = 49
+                        </div>
+                    </div>
+                    
+                    <div class="q-table-update">
+                        <h4>The Optimistic Update:</h4>
+                        <div class="thought-bubble">
+                            "I update Q(Onions, Ketchup) assuming PERFECT play afterward, even though apprentice won't actually play perfectly!"
+                        </div>
+                        <div class="formula-equation">
+                            Q(S,A) ← Q(S,A) + α[R + γ×MAX Q(S',a) - Q(S,A)]
+                        </div>
+                        <div class="q-cell updated">
+                            Q(Onions, Ketchup):<br>
+                            Updated toward 49 (not 22!)<br>
+                            Learning optimal despite exploration!
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="key-insight">
+                    🧠 KEY: Always uses MAX future value, learns optimal policy while exploring freely!
+                </div>
+            </div>
+            
+            <!-- SATURDAY: TD WITH WEIGHTED IS -->
+            <div class="day-section">
+                <div class="day-header">
+                    <div class="day-name">SATURDAY</div>
+                    <div class="algorithm-name">TD Off-Policy with Weighted Importance Sampling</div>
+                </div>
+                
+                <div class="chef-setup">
+                    <div class="chef-visual">
+                        <div class="chef-avatar"></div>
+                        <div style="font-size: 4em;">⚖️</div>
+                        <p><strong>The Careful Averager</strong></p>
+                    </div>
+                    <div class="thinking-process">
+                        <h3>Chef Alex's Prudent Approach:</h3>
+                        <div class="thought-bubble">
+                            "One weird lucky result shouldn't drastically change my recipe. I'll keep a running average of importance weights to stabilize learning!"
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="state-action-flow">
+                    <div class="flow-title">⚖️ Weighted Averaging Process</div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">1</span>
+                        <strong>Calculate Step Importance:</strong>
+                    </div>
+                    
+                    <div class="is-calculation">
+                        Current step: Apprentice adds ketchup<br>
+                        ρ = π(ketchup|onions) / b(ketchup|onions)<br>
+                        ρ = 0% / 5% = 0
+                    </div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">2</span>
+                        <strong>Check Cumulative History (C-table):</strong>
+                    </div>
+                    
+                    <div class="q-table-visual">
+                        <div class="q-cell">
+                            C(Onions) = 8.2<br>
+                            (Sum of past ρ values)
+                        </div>
+                        <div class="q-cell">
+                            Episodes seen: 10<br>
+                            Average ρ = 0.82
+                        </div>
+                    </div>
+                    
+                    <div class="detailed-step">
+                        <span class="step-number">3</span>
+                        <strong>Calculate Weighted Update:</strong>
+                    </div>
+                    
+                    <div class="formula-equation">
+                        Weight = ρ / C = 0 / 8.2 = 0<br>
+                        Update = Weight × TD_Error = 0 × anything = 0
+                    </div>
+                    
+                    <div class="thought-bubble">
+                        "This weird episode gets weight 0. My recipe stays stable! If it was a common, important episode, it would have high weight."
+                    </div>
+                    
+                    <div class="importance-sampling">
+                        <h4>Why Weighted IS Matters:</h4>
+                        <ul>
+                            <li><strong>Regular IS:</strong> One lucky weird event → Huge update</li>
+                            <li><strong>Weighted IS:</strong> Averages over history → Stable learning</li>
+                            <li><strong>Result:</strong> Less variance, more reliable convergence</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-insight">
+                    ⚖️ KEY: Stabilizes off-policy learning by averaging importance weights over time!
+                </div>
+            </div>
+        </div>
+        
+        <!-- Summary Section -->
+        <div class="terminology-intro" style="margin-top: 40px;">
+            <h2>🎓 The Complete Learning Journey</h2>
+            
+            <div class="comparison-section">
+                <div class="compare-box">
+                    <h3>Model-Based vs Model-Free</h3>
+                    <strong>Monday (DP):</strong> Has perfect model<br>
+                    <strong>All others:</strong> Learn by experience
+                </div>
+                <div class="compare-box">
+                    <h3>When Updates Happen</h3>
+                    <strong>MC methods:</strong> After complete episode<br>
+                    <strong>TD methods:</strong> After every step
+                </div>
+            </div>
+            
+            <div class="comparison-section">
+                <div class="compare-box">
+                    <h3>On-Policy Learning</h3>
+                    <strong>Tuesday (MC):</strong> Learn from own actions<br>
+                    <strong>Thursday (SARSA):</strong> Update using actual next
+                </div>
+                <div class="compare-box">
+                    <h3>Off-Policy Learning</h3>
+                    <strong>Wednesday (MC-IS):</strong> Correct full episodes<br>
+                    <strong>Friday (Q-Learn):</strong> Use max future<br>
+                    <strong>Saturday (TD-IS):</strong> Weighted corrections
+                </div>
+            </div>
+            
+            <div class="key-insight" style="margin-top: 30px; font-size: 1.2em;">
+                🏆 ULTIMATE GOAL: Fill the Q-table (recipe book) with accurate scores for every (State, Action) pair!<br>
+                Different algorithms are just different ways to update these scores!
+            </div>
+        </div>
+    </div>
+</body>
+</html>
